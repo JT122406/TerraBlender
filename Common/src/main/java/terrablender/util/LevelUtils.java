@@ -102,7 +102,10 @@ public class LevelUtils
         // Append modded biomes to the biome source biome list
         Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
         ImmutableList.Builder<Holder<Biome>> builder = ImmutableList.builder();
-        Regions.get(regionType).forEach(region -> region.addBiomes(biomeRegistry, pair -> builder.add(biomeRegistry.getHolderOrThrow(pair.getSecond()))));
+        Regions.get(regionType).forEach(region -> region.addBiomes(biomeRegistry, pair -> {
+            if (biomeRegistry.getHolder(pair.getSecond()).isPresent())
+                builder.add(biomeRegistry.getHolderOrThrow(pair.getSecond()));
+        }));
         biomeSourceEx.appendDeferredBiomesList(builder.build());
 
         TerraBlender.LOGGER.info(String.format("Initialized TerraBlender biomes for level stem %s", levelResourceKey.location()));

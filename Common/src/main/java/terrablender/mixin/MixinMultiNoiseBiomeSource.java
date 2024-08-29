@@ -19,6 +19,7 @@ package terrablender.mixin;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
@@ -47,7 +48,9 @@ public abstract class MixinMultiNoiseBiomeSource
     @Inject(method="addDebugInfo", at =@At("TAIL"))
     public void addDebugInfo(List<String> debugLines, BlockPos pos, Climate.Sampler sampler, CallbackInfo ci)
     {
+        int qx = QuartPos.fromBlock(pos.getX());
+        int qz = QuartPos.fromBlock(pos.getZ());
         IExtendedParameterList<Holder<Biome>> extension = (IExtendedParameterList<Holder<Biome>>) this.parameters();
-        debugLines.add("Region: " + extension.getRegion(extension.getUniqueness(pos.getX(), pos.getY(), pos.getZ())).getName().toString());
+        debugLines.add("Region: " + extension.getRegion(extension.getUniqueness(qx, 0, qz)).getName().toString());
     }
 }

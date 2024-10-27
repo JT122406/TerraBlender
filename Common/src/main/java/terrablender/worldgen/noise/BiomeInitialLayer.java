@@ -21,7 +21,7 @@ public class BiomeInitialLayer extends WeightedRandomLayer<WeightedEntry.Wrapper
     public BiomeInitialLayer(RegistryAccess registryAccess, List<WeightedEntry.Wrapper<ResourceKey<Biome>>> entries)
     {
         super(entries);
-        this.biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        this.biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
     }
 
     @Override
@@ -41,6 +41,6 @@ public class BiomeInitialLayer extends WeightedRandomLayer<WeightedEntry.Wrapper
         if (!this.biomeRegistry.containsKey(key))
             throw new RuntimeException("Attempted to resolve id for unregistered biome " + key);
 
-        return this.biomeRegistry.getId(this.biomeRegistry.get(key));
+        return this.biomeRegistry.getId(this.biomeRegistry.get(key).get().value());
     }
 }

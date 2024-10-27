@@ -50,7 +50,7 @@ public class InitialLayer extends WeightedRandomLayer<WeightedEntry.Wrapper<Regi
 
     private static List<WeightedEntry.Wrapper<Region>> createEntries(RegistryAccess registryAccess, RegionType regionType)
     {
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
         return Regions.get(regionType).stream().filter(region -> {
             AtomicBoolean biomesAdded = new AtomicBoolean(false);
             region.addBiomes(biomeRegistry, pair -> biomesAdded.set(true));

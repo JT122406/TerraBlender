@@ -51,6 +51,6 @@ public abstract class MixinMultiNoiseBiomeSource
         int qx = QuartPos.fromBlock(pos.getX());
         int qz = QuartPos.fromBlock(pos.getZ());
         IExtendedParameterList<Holder<Biome>> extension = (IExtendedParameterList<Holder<Biome>>) this.parameters();
-        debugLines.add("Region: " + extension.getRegion(extension.getUniqueness(qx, 0, qz)).getName().toString());
+        if (extension.isInitialized()) debugLines.add("Region: " + extension.getRegion(extension.getUniqueness(qx, 0, qz)).getName().toString());
     }
 }

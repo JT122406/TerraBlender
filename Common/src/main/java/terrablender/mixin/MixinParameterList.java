@@ -63,7 +63,7 @@ public abstract class MixinParameterList<T> implements IExtendedParameterList<T>
         this.uniqueness = LayeredNoiseUtil.uniqueness(registryAccess, regionType, seed);
         this.uniqueTrees = new SearchTreeEntry[Regions.getCount(regionType)];
 
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
 
         for (Region region : Regions.get(regionType))
         {
@@ -76,10 +76,10 @@ public abstract class MixinParameterList<T> implements IExtendedParameterList<T>
             }
             else
             {
-                List<Pair<Climate.ParameterPoint, Holder<Biome>>> pairs = new ArrayList<>();
+                List<Pair<Climate.ParameterPoint, Holder.Reference<Biome>>> pairs = new ArrayList<>();
                 region.addBiomes(biomeRegistry, pair -> {
-                    if (biomeRegistry.getHolder(pair.getSecond()).isPresent())
-                        pairs.add(pair.mapSecond(biomeRegistry::getHolderOrThrow));
+                    if (biomeRegistry.containsKey(pair.getSecond()))
+                        pairs.add(pair.mapSecond(biomeRegistry::getOrThrow));
                 });
 
                 // We can't create an RTree if there are no values present.

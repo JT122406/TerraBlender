@@ -47,7 +47,7 @@ public class LevelUtils
     public static void initializeOnServerStart(MinecraftServer server)
     {
         RegistryAccess registryAccess = server.registryAccess();
-        Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
+        Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
         long seed = server.getWorldData().worldGenOptions().seed();
 
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : levelStemRegistry.entrySet())
@@ -112,11 +112,11 @@ public class LevelUtils
         parametersEx.initializeForTerraBlender(registryAccess, regionType, seed);
 
         // Append modded biomes to the biome source biome list
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
         ImmutableList.Builder<Holder<Biome>> builder = ImmutableList.builder();
         Regions.get(regionType).forEach(region -> region.addBiomes(biomeRegistry, pair -> {
-            if (biomeRegistry.getHolder(pair.getSecond()).isPresent())
-                builder.add(biomeRegistry.getHolderOrThrow(pair.getSecond()));
+            if (biomeRegistry.containsKey(pair.getSecond()))
+                builder.add(biomeRegistry.getOrThrow(pair.getSecond()));
         }));
         biomeSourceEx.appendDeferredBiomesList(builder.build());
 

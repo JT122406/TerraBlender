@@ -71,7 +71,7 @@ public class MixinTheEndBiomeSource implements IExtendedTheEndBiomeSource
     @Override
     public void initializeForTerraBlender(RegistryAccess registryAccess, long seed)
     {
-        this.biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        this.biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
 
         var highlands = EndBiomeRegistry.getHighlandsBiomes();
         var midlands = EndBiomeRegistry.getMidlandsBiomes();
@@ -93,7 +93,7 @@ public class MixinTheEndBiomeSource implements IExtendedTheEndBiomeSource
                 throw new RuntimeException("Biome " + key + " has not been registered!");
         });
 
-        this.tbPossibleBiomes = allBiomes.stream().map(biomeRegistry::getHolderOrThrow).collect(Collectors.toSet());
+        this.tbPossibleBiomes = allBiomes.stream().map(biomeRegistry::getOrThrow).collect(Collectors.toSet());
         this.highlandsArea = LayeredNoiseUtil.biomeArea(registryAccess, seed, TerraBlender.CONFIG.endHighlandsBiomeSize, highlands);
         this.midlandsArea = LayeredNoiseUtil.biomeArea(registryAccess, seed, TerraBlender.CONFIG.endMidlandsBiomeSize, midlands);
         this.edgeArea = LayeredNoiseUtil.biomeArea(registryAccess, seed, TerraBlender.CONFIG.endEdgeBiomeSize, edge);
@@ -154,6 +154,6 @@ public class MixinTheEndBiomeSource implements IExtendedTheEndBiomeSource
     @Unique
     private Holder<Biome> getBiomeHolder(int id)
     {
-        return this.biomeRegistry.getHolder(id).orElseThrow();
+        return this.biomeRegistry.get(id).orElseThrow();
     }
 }
